@@ -7,7 +7,7 @@ import (
 func main() {
 	params := aco.Parameter{
 		NumAnts:       30,
-		NumNodes:      50,
+		NumNodes:      300,
 		Q:             100,
 		Alpha:         3,
 		Beta:          5,

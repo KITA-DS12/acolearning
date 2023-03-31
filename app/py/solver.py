@@ -86,9 +86,9 @@ class Solver:
                 self.graph.reset_pheromones()
                 self.counter_unchanged = 0
 
-            print(t, self.best_ant)
-            plot.play_plot(self.graph.coordinates,
-                           self.best_ant[1], self.good_ant[1])
+            print(t, "iter, length: ", self.best_ant[0])
+            # plot.play_plot(self.graph.coordinates,
+            #                self.best_ant[1], self.good_ant[1])
 
     def __run_cycle_aco(self):
         """

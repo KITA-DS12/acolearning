@@ -44,7 +44,7 @@ func (s *Solver) RunAco() {
 			s.StagnationCount = 0
 		}
 
-		fmt.Println(t, s.BestAnt)
+		fmt.Println(t, "iter, length: ", s.BestAnt.Length)
 	}
 }
 
@@ -52,8 +52,6 @@ func (s *Solver) runCycle() {
 	s.Colony.updateColony()
 	s.updatePheromones()
 	s.GoodAnt = s.Colony.GetBestRoutes()
-	fmt.Println("GoodAnt", s.GoodAnt.Length)
-	fmt.Println("BestAnt", s.BestAnt.Length)
 }
 
 func (s *Solver) resetAco() {
