@@ -35,7 +35,7 @@ func (ant *Ant) ConstructRoutes() {
 			toNode = toNodes[rand.Intn(len(toNodes))]
 		} else {
 			randomProbability := rand.Float64()
-			toNode = toNodes[biscetLeft(toProbabilities, randomProbability)]
+			toNode = toNodes[getInsertionIndex(toProbabilities, randomProbability)]
 		}
 		ant.VisitedRoutes = append(ant.VisitedRoutes, toNode)
 		ant.IsVisited[toNode] = true

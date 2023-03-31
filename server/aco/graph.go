@@ -21,24 +21,24 @@ type Point struct {
 
 func NewGraph(params Parameter) *Graph {
 
-	g := &Graph{}
-	g.Params = params
-	g.Coordinates = make([]Point, g.Params.NumNodes)
-	g.Distances = make([][]float64, g.Params.NumNodes)
-	g.TrailPheromones = make([][]float64, g.Params.NumNodes)
-	g.NewTrailPheromones = make([][]float64, g.Params.NumNodes)
-	g.HeuristicValues = make([][]float64, g.Params.NumNodes)
+	graph := &Graph{}
+	graph.Params = params
+	graph.Coordinates = make([]Point, graph.Params.NumNodes)
+	graph.Distances = make([][]float64, graph.Params.NumNodes)
+	graph.TrailPheromones = make([][]float64, graph.Params.NumNodes)
+	graph.NewTrailPheromones = make([][]float64, graph.Params.NumNodes)
+	graph.HeuristicValues = make([][]float64, graph.Params.NumNodes)
 
-	for i := 0; i < g.Params.NumNodes; i++ {
-		g.Distances[i] = make([]float64, g.Params.NumNodes)
-		g.TrailPheromones[i] = make([]float64, g.Params.NumNodes)
-		g.NewTrailPheromones[i] = make([]float64, g.Params.NumNodes)
-		g.HeuristicValues[i] = make([]float64, g.Params.NumNodes)
+	for i := 0; i < graph.Params.NumNodes; i++ {
+		graph.Distances[i] = make([]float64, graph.Params.NumNodes)
+		graph.TrailPheromones[i] = make([]float64, graph.Params.NumNodes)
+		graph.NewTrailPheromones[i] = make([]float64, graph.Params.NumNodes)
+		graph.HeuristicValues[i] = make([]float64, graph.Params.NumNodes)
 	}
 
-	g.prepareGraph()
+	graph.prepareGraph()
 
-	return g
+	return graph
 }
 
 func (g *Graph) prepareGraph() {
