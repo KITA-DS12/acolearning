@@ -19,9 +19,7 @@ type Point struct {
 	Y float64
 }
 
-func NewGraph(
-	params Parameter,
-) *Graph {
+func NewGraph(params Parameter) *Graph {
 
 	g := &Graph{}
 	g.Params = params
