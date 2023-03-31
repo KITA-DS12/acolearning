@@ -26,5 +26,12 @@ func NewGraph(
 	g.NewTrailPheromones = make([][]int, g.Params.NumNodes)
 	g.HeuristicValues = make([][]int, g.Params.NumNodes)
 
+	for i := 0; i < g.Params.NumNodes; i++ {
+		g.Distances[i] = make([]int, g.Params.NumNodes)
+		g.TrailPheromones[i] = make([]int, g.Params.NumNodes)
+		g.NewTrailPheromones[i] = make([]int, g.Params.NumNodes)
+		g.HeuristicValues[i] = make([]int, g.Params.NumNodes)
+	}
+
 	return g
 }
