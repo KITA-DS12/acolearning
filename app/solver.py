@@ -73,7 +73,7 @@ class Solver:
             self.__run_cycle_aco()
             self.__reset_aco()
 
-            if (self.best_ant is None) or (self.good_ant > self.best_ant):
+            if (self.best_ant is None) or (self.good_ant < self.best_ant):
                 self.best_ant = self.good_ant
             else:
                 self.counter_unchanged += 1
