@@ -6,6 +6,8 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+
+	"github.com/KITA-DS12/acolearning.git/middleware"
 )
 
 type Graph struct {
@@ -33,6 +35,12 @@ type Point struct {
 }
 
 func runAco(w http.ResponseWriter, r *http.Request) {
+	middleware.CorsMiddleware(w)
+	if r.Method == "OPTIONS" {
+		middleware.OptionMiddleware(w)
+		return
+	}
+
 	if r.Method != "POST" {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		return
