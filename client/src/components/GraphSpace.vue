@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import axios from "axios";
 import {
   getFullConfigs,
   type Configs,
@@ -32,7 +33,11 @@ const nodes: Nodes = reactive({
   node19: { name: "Node 19" },
   node20: { name: "Node 20" },
 });
-const edges: Edges = reactive({});
+const edges: Edges = reactive({
+  edge1: { source: "node1", target: "node2" },
+  edge2: { source: "node2", target: "node3" },
+  edge3: { source: "node3", target: "node4" },
+});
 const layouts: Layouts = reactive({
   nodes: {
     node1: { x: 0, y: 0 },
@@ -59,14 +64,16 @@ const layouts: Layouts = reactive({
 });
 const configs: Configs = getFullConfigs();
 
-const data: any = {
-  nodes: nodes,
-  edges: edges,
-  layouts: layouts,
-};
-
 const testSend = async () => {
-  console.log(data);
+  await axios
+    .post("aco", {
+      nodes: nodes,
+      edges: edges,
+      layouts: layouts,
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 };
 </script>
 
@@ -75,14 +82,8 @@ const testSend = async () => {
     <v-btn @click="testSend" color="indigo">送信</v-btn>
   </div>
   <div class="draw-space">
-    <v-network-graph
-      ref="graph"
-      v-model:zoom-level="zoomLevel"
-      :nodes="nodes"
-      :edges="edges"
-      :layouts="layouts"
-      :configs="configs"
-    >
+    <v-network-graph ref="graph" v-model:zoom-level="zoomLevel" :nodes="nodes" :edges="edges" :layouts="layouts"
+      :configs="configs">
     </v-network-graph>
   </div>
 </template>
