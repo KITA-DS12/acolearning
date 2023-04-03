@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/KITA-DS12/acolearning.git/app/aco"
 	"github.com/KITA-DS12/acolearning.git/middleware"
 )
 
@@ -65,6 +66,23 @@ func runAco(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(err)
 		return
 	}
+
+	params := aco.Parameter{
+		NumAnts:       30,
+		NumNodes:      300,
+		Q:             100,
+		Alpha:         3,
+		Beta:          5,
+		Rou:           0.9,
+		MaxIteration:  300,
+		MinTau:        0,
+		MaxTau:        3000,
+		NumCycleReset: 30,
+		IndexStart:    0,
+	}
+
+	solver := aco.NewSolver(params)
+	solver.RunAco()
 
 	log.Println("--- Graph ---")
 	log.Println("--- Nodes ---")
