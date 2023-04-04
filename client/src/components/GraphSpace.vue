@@ -1,21 +1,15 @@
 <script setup lang="ts">
 import { useStore } from "@/store";
 import axios from "axios";
-import {
-  getFullConfigs,
-  type Configs,
-  type Edges,
-  type Layouts,
-  type Nodes,
-} from "v-network-graph";
-import { ref, type Ref } from "vue";
+import { getFullConfigs, type Configs } from "v-network-graph";
+import { computed, ref } from "vue";
 
-const zoomLevel = 3;
 const store = useStore();
 
-const nodes: Ref<Nodes> = ref(store.nodes);
-const edges: Ref<Edges> = ref(store.edges);
-const layouts: Ref<Layouts> = ref(store.layouts);
+const zoomLevel = computed(() => store.zoomLevel);
+const nodes = computed(() => store.nodes);
+const edges = ref(store.edges);
+const layouts = computed(() => store.layouts);
 const configs: Configs = getFullConfigs();
 
 const testSend = async () => {
@@ -39,14 +33,8 @@ const testSend = async () => {
     <v-btn @click="testSend" color="indigo">送信</v-btn>
   </div>
   <div class="draw-space">
-    <v-network-graph
-      ref="graph"
-      v-model:zoom-level="zoomLevel"
-      v-model:edges="edges"
-      v-model:nodes="nodes"
-      v-model:layouts="layouts"
-      v-model:configs="configs"
-    >
+    <v-network-graph ref="graph" v-model:zoom-level="zoomLevel" v-model:edges="edges" v-model:nodes="nodes"
+      v-model:layouts="layouts" v-model:configs="configs">
     </v-network-graph>
   </div>
 </template>

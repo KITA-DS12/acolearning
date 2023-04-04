@@ -1,8 +1,17 @@
 import { defineStore } from "pinia";
+import type { Nodes, Edges, Layouts } from "v-network-graph";
+
+interface GraphState {
+  zoomLevel: number;
+  nodes: Nodes;
+  edges: Edges;
+  layouts: Layouts;
+}
 
 export const useStore = defineStore({
   id: "graph",
-  state: () => ({
+  state: (): GraphState => ({
+    zoomLevel: 5,
     nodes: {
       node0: { name: "Node 0" },
       node1: { name: "Node 1" },
@@ -51,4 +60,14 @@ export const useStore = defineStore({
       },
     },
   }),
+  actions: {
+    setLevel(newValue: number) {
+      this.zoomLevel = newValue;
+    },
+    addNode(id: string, name: string) {
+      const nodes = this.nodes;
+      nodes[id] = { name: name };
+      this.nodes = nodes;
+    },
+  },
 });

@@ -1,7 +1,19 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { useStore } from "@/store";
+import { computed } from "vue";
 
-const zoomLevel = ref(0);
+const store = useStore();
+const zoomLevel = computed({
+  get: () => store.zoomLevel,
+  set: (newValue) => store.setLevel(newValue),
+});
+
+const addNode = () => {
+  const nextNode = Object.keys(store.nodes).length;
+  const nodeId: string = `node${nextNode}`;
+  const name: string = `Node ${nextNode}`;
+  store.addNode(nodeId, name);
+};
 </script>
 
 <template>
@@ -9,7 +21,7 @@ const zoomLevel = ref(0);
     <div class="control-panel d-flex flex-row justify-center">
       <label>Node:</label>
       <div class="button-block">
-        <v-btn class="ma-1" variant="outlined" rounded="lg">
+        <v-btn class="ma-1" variant="outlined" rounded="lg" @click="addNode">
           <v-icon color="purple">mdi-plus-circle-outline</v-icon>
         </v-btn>
         <v-btn class="ma-1" variant="outlined" rounded="lg">
@@ -33,15 +45,8 @@ const zoomLevel = ref(0);
       </div>
       <label>Zoom:</label>
       <div class="button-block">
-        <v-slider
-          v-model="zoomLevel"
-          min="0.1"
-          max="12"
-          :step="1"
-          color="deep-purple"
-          track-color="deep-purple"
-          style="width: 200px; margin-top: 5px; margin-bottom: -15px"
-        />
+        <v-slider v-model="zoomLevel" min="0.1" max="12" :step="1" color="deep-purple" track-color="deep-purple"
+          style="width: 200px; margin-top: 5px; margin-bottom: -15px" />
       </div>
     </div>
   </div>
@@ -57,7 +62,7 @@ const zoomLevel = ref(0);
   text-align: center;
 }
 
-.control-panel > label {
+.control-panel>label {
   color: #4527a0;
   padding: 5px;
   padding-left: 15px;
