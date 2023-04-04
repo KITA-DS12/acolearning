@@ -2,7 +2,6 @@ package aco
 
 import (
 	"math"
-	"math/rand"
 )
 
 type Graph struct {
@@ -19,7 +18,7 @@ type Point struct {
 	Y float64
 }
 
-func NewGraph(params Parameter) *Graph {
+func NewGraph(params Parameter, points []Point) *Graph {
 
 	graph := &Graph{}
 	graph.Params = params
@@ -36,18 +35,13 @@ func NewGraph(params Parameter) *Graph {
 		graph.HeuristicValues[i] = make([]float64, graph.Params.NumNodes)
 	}
 
-	graph.prepareGraph()
+	graph.prepareGraph(points)
 
 	return graph
 }
 
-func (g *Graph) prepareGraph() {
-	for i := 0; i < g.Params.NumNodes; i++ {
-		g.Coordinates[i] = Point{
-			X: rand.Float64() * 1000,
-			Y: rand.Float64() * 1000,
-		}
-	}
+func (g *Graph) prepareGraph(points []Point) {
+	g.Coordinates = points
 	for i := 0; i < g.Params.NumNodes; i++ {
 		for j := 0; j < g.Params.NumNodes; j++ {
 			g.Distances[i][j] = calcDistance(

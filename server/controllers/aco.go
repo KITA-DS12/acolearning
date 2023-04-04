@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/KITA-DS12/acolearning.git/app/aco"
 	"github.com/KITA-DS12/acolearning.git/middleware"
@@ -31,8 +31,8 @@ type Layout struct {
 }
 
 type Point struct {
-	X int `json:"x"`
-	Y int `json:"y"`
+	X float64 `json:"x"`
+	Y float64 `json:"y"`
 }
 
 func runAco(w http.ResponseWriter, r *http.Request) {
@@ -67,34 +67,43 @@ func runAco(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	var layouts []aco.Point
+	for i := 0; i < len(graph.Layouts.Nodes); i++ {
+		var p aco.Point
+		key := "node" + strconv.Itoa(i)
+		p.X = graph.Layouts.Nodes[key].X
+		p.Y = graph.Layouts.Nodes[key].Y
+		layouts = append(layouts, p)
+	}
+
 	params := aco.Parameter{
 		NumAnts:       30,
-		NumNodes:      300,
+		NumNodes:      20,
 		Q:             100,
 		Alpha:         3,
 		Beta:          5,
 		Rou:           0.9,
-		MaxIteration:  300,
+		MaxIteration:  500,
 		MinTau:        0,
 		MaxTau:        3000,
 		NumCycleReset: 30,
 		IndexStart:    0,
 	}
 
-	solver := aco.NewSolver(params)
-	solver.RunAco()
+	solver := aco.NewSolver(params, layouts)
+	route := solver.RunAco()
+	var edges = make(map[string]Edge)
+	for i := 0; i < len(route)-1; i++ {
+		var name = "edge" + strconv.Itoa(i)
+		var edge Edge
+		edge.Source = "node" + strconv.Itoa(route[i])
+		edge.Target = "node" + strconv.Itoa(route[i+1])
+		edges[name] = edge
+	}
 
-	log.Println("--- Graph ---")
-	log.Println("--- Nodes ---")
-	for id, n := range graph.Nodes {
-		log.Printf("%s: %s\n", id, n.Name)
-	}
-	log.Println("--- Edges ---")
-	for id, e := range graph.Edges {
-		log.Printf("%s: %s -> %s\n", id, e.Source, e.Target)
-	}
-	log.Println("--- Layouts ---")
-	for i, p := range graph.Layouts.Nodes {
-		log.Printf("%s: {X:%d, Y:%d}\n", i, p.X, p.Y)
-	}
+	graph.Edges = edges
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(graph)
 }

@@ -14,8 +14,8 @@ type Solver struct {
 	StagnationCount int
 }
 
-func NewSolver(params Parameter) *Solver {
-	graph := NewGraph(params)
+func NewSolver(params Parameter, points []Point) *Solver {
+	graph := NewGraph(params, points)
 	colony := NewColony(params, *graph)
 	solver := &Solver{}
 	solver.Params = params
@@ -28,7 +28,7 @@ func NewSolver(params Parameter) *Solver {
 	return solver
 }
 
-func (s *Solver) RunAco() {
+func (s *Solver) RunAco() []int {
 	for t := 0; t < s.Params.MaxIteration; t++ {
 		s.runCycle()
 		s.resetAco()
@@ -46,6 +46,7 @@ func (s *Solver) RunAco() {
 
 		fmt.Println(t, "iter, length: ", s.BestAnt.Length)
 	}
+	return s.BestAnt.Route
 }
 
 func (s *Solver) runCycle() {
