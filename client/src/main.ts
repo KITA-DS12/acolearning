@@ -1,4 +1,5 @@
 import { createApp } from "vue";
+import { createPinia } from "pinia";
 import App from "./App.vue";
 import router from "./router";
 
@@ -20,8 +21,10 @@ axios.defaults.baseURL = "http://localhost:8888/";
 import VNetworkGraph from "v-network-graph";
 import "v-network-graph/lib/style.css";
 
+const pinia = createPinia();
 const app = createApp(App);
 
+app.use(pinia);
 app.use(router);
 app.use(vuetify);
 app.use(VNetworkGraph);
