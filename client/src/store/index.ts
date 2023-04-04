@@ -3,6 +3,7 @@ import type { Nodes, Edges, Layouts } from "v-network-graph";
 
 interface GraphState {
   zoomLevel: number;
+  selectedNodes: Array<string>;
   nodes: Nodes;
   edges: Edges;
   layouts: Layouts;
@@ -59,15 +60,25 @@ export const useStore = defineStore({
         node19: { x: 180, y: 40 },
       },
     },
+    selectedNodes: [],
   }),
   actions: {
     setLevel(newValue: number) {
       this.zoomLevel = newValue;
     },
+    setNodes(newArray: Nodes) {
+      this.nodes = newArray;
+    },
+    setSelectedNodes(newArray: Array<string>) {
+      this.selectedNodes = newArray;
+    },
     addNode(id: string, name: string) {
       const nodes = this.nodes;
       nodes[id] = { name: name };
       this.nodes = nodes;
+    },
+    removeNode(id: string) {
+      delete this.nodes[id];
     },
   },
 });

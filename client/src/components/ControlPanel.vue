@@ -7,12 +7,22 @@ const zoomLevel = computed({
   get: () => store.zoomLevel,
   set: (newValue) => store.setLevel(newValue),
 });
+const selectNodes = computed({
+  get: () => store.selectedNodes,
+  set: (newArray) => store.setSelectedNodes(newArray),
+});
 
 const addNode = () => {
   const nextNode = Object.keys(store.nodes).length;
   const nodeId: string = `node${nextNode}`;
   const name: string = `Node ${nextNode}`;
   store.addNode(nodeId, name);
+};
+
+const removeNode = () => {
+  for (const nodeId of selectNodes.value) {
+    store.removeNode(nodeId);
+  }
 };
 </script>
 
@@ -22,10 +32,10 @@ const addNode = () => {
       <label>Node:</label>
       <div class="button-block">
         <v-btn class="ma-1" variant="outlined" rounded="lg" @click="addNode">
-          <v-icon color="purple">mdi-plus-circle-outline</v-icon>
+          <v-icon color="deep-purple">mdi-plus-circle-outline</v-icon>
         </v-btn>
-        <v-btn class="ma-1" variant="outlined" rounded="lg">
-          <v-icon color="purple">mdi-minus-circle-outline</v-icon>
+        <v-btn class="ma-1" variant="outlined" rounded="lg" @click="removeNode">
+          <v-icon color="deep-purple">mdi-minus-circle-outline</v-icon>
         </v-btn>
       </div>
       <label>Layout:</label>

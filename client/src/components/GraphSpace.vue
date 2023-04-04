@@ -11,6 +11,12 @@ const nodes = computed(() => store.nodes);
 const edges = ref(store.edges);
 const layouts = computed(() => store.layouts);
 const configs: Configs = getFullConfigs();
+configs.node.selectable = true;
+
+const selectNodes = computed({
+  get: () => store.selectedNodes,
+  set: (newArray) => store.setSelectedNodes(newArray),
+});
 
 const testSend = async () => {
   await axios
@@ -29,13 +35,26 @@ const testSend = async () => {
 </script>
 
 <template>
-  <div class="d-flex flex-row justify-center">
-    <v-btn @click="testSend" color="indigo">送信</v-btn>
-  </div>
   <div class="draw-space">
-    <v-network-graph ref="graph" v-model:zoom-level="zoomLevel" v-model:edges="edges" v-model:nodes="nodes"
-      v-model:layouts="layouts" v-model:configs="configs">
+    <v-network-graph
+      ref="graph"
+      v-model:zoom-level="zoomLevel"
+      v-model:edges="edges"
+      v-model:nodes="nodes"
+      v-model:layouts="layouts"
+      v-model:configs="configs"
+      v-model:selected-nodes="selectNodes"
+    >
     </v-network-graph>
+  </div>
+  <div class="d-flex flex-row justify-end" style="width: 90%">
+    <v-btn
+      @click="testSend"
+      color="purple-lighten-2"
+      size="x-large"
+      class="font-weight-bold"
+      >送信</v-btn
+    >
   </div>
 </template>
 <style>
