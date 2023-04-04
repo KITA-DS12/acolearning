@@ -7,11 +7,12 @@ import {
   type Layouts,
   type Nodes,
 } from "v-network-graph";
-import { reactive } from "vue";
+import { ref, type Ref } from "vue";
 
 const zoomLevel = 3;
 
-const nodes: Nodes = reactive({
+const nodes: Ref<Nodes> = ref({
+  node0: { name: "Node 0" },
   node1: { name: "Node 1" },
   node2: { name: "Node 2" },
   node3: { name: "Node 3" },
@@ -31,35 +32,30 @@ const nodes: Nodes = reactive({
   node17: { name: "Node 17" },
   node18: { name: "Node 18" },
   node19: { name: "Node 19" },
-  node20: { name: "Node 20" },
 });
-const edges: Edges = reactive({
-  edge1: { source: "node1", target: "node2" },
-  edge2: { source: "node2", target: "node3" },
-  edge3: { source: "node3", target: "node4" },
-});
-const layouts: Layouts = reactive({
+let edges: Ref<Edges> = ref({});
+const layouts: Ref<Layouts> = ref({
   nodes: {
-    node1: { x: 0, y: 0 },
-    node2: { x: 20, y: 10 },
-    node3: { x: 40, y: 10 },
-    node4: { x: 60, y: 30 },
-    node5: { x: 80, y: 40 },
-    node6: { x: 100, y: 40 },
-    node7: { x: 120, y: 30 },
-    node8: { x: 140, y: 10 },
-    node9: { x: 160, y: 10 },
-    node10: { x: 180, y: 0 },
-    node11: { x: 0, y: 40 },
-    node12: { x: 20, y: 30 },
-    node13: { x: 40, y: 30 },
-    node14: { x: 60, y: 10 },
-    node15: { x: 80, y: 0 },
-    node16: { x: 100, y: 0 },
-    node17: { x: 120, y: 10 },
-    node18: { x: 140, y: 30 },
-    node19: { x: 160, y: 30 },
-    node20: { x: 180, y: 40 },
+    node0: { x: 0, y: 0 },
+    node1: { x: 20, y: 10 },
+    node2: { x: 40, y: 10 },
+    node3: { x: 60, y: 30 },
+    node4: { x: 80, y: 40 },
+    node5: { x: 100, y: 40 },
+    node6: { x: 120, y: 30 },
+    node7: { x: 140, y: 10 },
+    node8: { x: 160, y: 10 },
+    node9: { x: 180, y: 0 },
+    node10: { x: 0, y: 40 },
+    node11: { x: 20, y: 30 },
+    node12: { x: 40, y: 30 },
+    node13: { x: 60, y: 10 },
+    node14: { x: 80, y: 0 },
+    node15: { x: 100, y: 0 },
+    node16: { x: 120, y: 10 },
+    node17: { x: 140, y: 30 },
+    node18: { x: 160, y: 30 },
+    node19: { x: 180, y: 40 },
   },
 });
 const configs: Configs = getFullConfigs();
@@ -67,9 +63,12 @@ const configs: Configs = getFullConfigs();
 const testSend = async () => {
   await axios
     .post("aco", {
-      nodes: nodes,
-      edges: edges,
-      layouts: layouts,
+      nodes: nodes.value,
+      edges: edges.value,
+      layouts: layouts.value,
+    })
+    .then((res) => {
+      edges.value = res.data.edges;
     })
     .catch((error) => {
       console.log(error);
@@ -82,8 +81,14 @@ const testSend = async () => {
     <v-btn @click="testSend" color="indigo">送信</v-btn>
   </div>
   <div class="draw-space">
-    <v-network-graph ref="graph" v-model:zoom-level="zoomLevel" :nodes="nodes" :edges="edges" :layouts="layouts"
-      :configs="configs">
+    <v-network-graph
+      ref="graph"
+      v-model:zoom-level="zoomLevel"
+      v-model:edges="edges"
+      v-model:nodes="nodes"
+      v-model:layouts="layouts"
+      v-model:configs="configs"
+    >
     </v-network-graph>
   </div>
 </template>
